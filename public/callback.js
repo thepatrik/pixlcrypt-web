@@ -3,11 +3,13 @@
 
     function init() {
         let auth = new Auth();
-        let code = auth.getCode();
+        let code = auth.parseCode();
+
         if (code !== undefined) {
-            auth.requestToken(code);
+            auth.requestToken(code, () => {
+                window.location.href = auth.getBaseUri() + "/index.html";
+            });
         }
-        console.log(code);
     }
 
     exports.Callback = {

@@ -3,16 +3,20 @@ class Auth {
     constructor() {
     }
 
-    getCode() {
-        return this._getParameterByName("code");
+    getBaseUri() {
+        return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
     }
 
     getRedirectUri() {
-        return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + "/callback.html";
+        return this.getBaseUri() + "/callback.html";
     }
 
     getClientId() {
         return "542fu8i4nfb4eckn95j4uek1m6";
+    }
+
+    parseCode() {
+        return this._getParameterByName("code");
     }
 
     requestToken(code, cb) {
@@ -20,8 +24,11 @@ class Auth {
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'json';
         xhr.addEventListener("load", res => {
+            console.log("HEJ");
             let data = res.target.response;
+            console.log("data", data);
             if (typeof data === 'string') data = JSON.parse(data);
+
             localStorage.setItem('refresh_token', data.refresh_token);
             localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('id_token', data.id_token);
@@ -46,5 +53,4 @@ class Auth {
         }
         return res;
     }
-
 }
