@@ -1,5 +1,22 @@
 language: js
 
-before_install: npm install
+before_install: make install
 
-script: npm test
+script: make test
+
+before_deploy: make build
+
+deploy:
+    provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: "pixlcrypt.com"
+    skip_cleanup: true
+    region: eu-west-1
+    local_dir: build
+
+after_deploy:
+    - sudo pip install s3cmd
+    - s3cmd --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY modify --add-header="Cache-Control:public, max-age=86400" s3://pixlcrypt.com
+    - npm install -g travis-ci-cloudfront-invalidation
+    - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
