@@ -17,6 +17,6 @@ deploy:
 
 after_deploy:
     - pip install --user s3cmd
-    - s3cmd --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY modify --add-header="Cache-Control:public, max-age=86400" s3://pixlcrypt.com
+    - s3cmd --recursive --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY modify --add-header="Cache-Control:public, max-age=86400" s3://pixlcrypt.com
     - npm install -g travis-ci-cloudfront-invalidation
     - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
