@@ -1,3 +1,6 @@
+import axios from 'axios'
+import Utils from './utils.js';
+
 class Auth {
 
     isSignedIn() {
@@ -29,40 +32,26 @@ class Auth {
     }
 
     parseCode() {
-        return this._getParameterByName("code");
+        return Utils.getParameterByName("code");
     }
 
-    requestToken(code, cb) {
-        let uri = "https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/token";
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = 'json';
-        xhr.addEventListener("load", res => {
-            let data = res.target.response;
-            if (typeof data === 'string') data = JSON.parse(data);
-
-            localStorage.setItem('refresh_token', data.refresh_token);
-            localStorage.setItem('access_token', data.access_token);
-            localStorage.setItem('id_token', data.id_token);
-            if (cb) cb();
+    getTokensAsync(code) {
+        return new Promise((resolve, reject) => {
+            const uri = "https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/token";
+            const conf = {
+                headers: {"Content-Type": "application/x-www-form-urlencoded"}
+            };
+            const params = new URLSearchParams('grant_type=authorization_code&client_id=' + this.getClientId() + '&redirect_uri=' + this.getRedirectUri() + '&code=' + (code ? code : this.getCode()));
+            axios.post(uri, params, conf).then(res => {
+                let data = res.data;
+                localStorage.setItem('refresh_token', res.data.refresh_token);
+                localStorage.setItem('access_token', res.data.access_token);
+                localStorage.setItem('id_token', res.data.id_token);
+                resolve();
+            }).catch(err => {
+                reject(err);
+            });
         });
-        xhr.open("POST", uri, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        let params = 'grant_type=authorization_code&client_id=' + this.getClientId() + '&redirect_uri=' + this.getRedirectUri() + '&code=' + (code ? code : this.getCode());
-        xhr.send(new URLSearchParams(params));
-    }
-
-    _getParameterByName(name, url, decodeUri) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        var res = results[2].replace(/\+/g, " ");
-        if (decodeUri) {
-            return decodeURIComponent(res);
-        }
-        return res;
     }
 }
 

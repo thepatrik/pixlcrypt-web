@@ -14,8 +14,8 @@ class AuthControl extends Component {
         let code = auth.parseCode();
 
         if (code !== undefined) {
-            auth.requestToken(code, () => {
-                this.setState({redirect: <Redirect to="/" />})
+            auth.getTokensAsync(code).then(() => {
+                this.setState({redirect: <Redirect to="/" />});
             });
         }
     }
