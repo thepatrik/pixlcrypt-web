@@ -43,7 +43,6 @@ class Auth {
             };
             const params = new URLSearchParams('grant_type=authorization_code&client_id=' + this.getClientId() + '&redirect_uri=' + this.getRedirectUri() + '&code=' + (code ? code : this.getCode()));
             axios.post(uri, params, conf).then(res => {
-                let data = res.data;
                 localStorage.setItem('refresh_token', res.data.refresh_token);
                 localStorage.setItem('access_token', res.data.access_token);
                 localStorage.setItem('id_token', res.data.id_token);
