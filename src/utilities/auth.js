@@ -1,7 +1,14 @@
-import axios from 'axios'
+import axios from 'axios';
 import Utils from './utils.js';
 
 class Auth {
+
+    constructor() {
+        this.authUri = "https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/token";
+        this.baseUri = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+        this.clientId = "542fu8i4nfb4eckn95j4uek1m6";
+        this.redirectUri = this.baseUri + "/auth";
+    }
 
     isSignedIn() {
         return this.getToken() != null && this.getRefreshToken() != null;
@@ -20,15 +27,15 @@ class Auth {
     }
 
     getBaseUri() {
-        return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+        return this.baseUri;
     }
 
     getRedirectUri() {
-        return this.getBaseUri() + "/auth";
+        return this.redirectUri;
     }
 
     getClientId() {
-        return "542fu8i4nfb4eckn95j4uek1m6";
+        return this.clientId;
     }
 
     parseCode() {
@@ -37,7 +44,7 @@ class Auth {
 
     getTokensAsync(code) {
         return new Promise((resolve, reject) => {
-            const uri = "https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/token";
+            const uri = this.authUri;
             const conf = {
                 headers: {"Content-Type": "application/x-www-form-urlencoded"}
             };

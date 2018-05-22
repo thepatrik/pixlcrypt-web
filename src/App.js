@@ -23,7 +23,7 @@ class App extends Component {
                                 <h1 className="App-title">pixlcrypt</h1>
                                 <LoginControl isSignedIn={auth.isSignedIn()} className="App-intro"/>
                             </header>
-                            <Grid />
+                            <Grid isSignedIn={auth.isSignedIn()} />
                         </div>
                     )
                 }}/>
