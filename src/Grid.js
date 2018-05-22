@@ -65,7 +65,7 @@ class Grid extends Component {
     render() {
         let data = this.state.data;
         return (
-            <Gallery images={data}/>
+            <Gallery images={data} enableImageSelection={false}/>
         );
     }
 }
