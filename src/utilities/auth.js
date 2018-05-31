@@ -42,6 +42,12 @@ class Auth {
         return Utils.getParameterByName("code");
     }
 
+    clearTokens() {
+        localStorage.removeItem("id_token");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+    }
+
     getTokensAsync(code) {
         return new Promise((resolve, reject) => {
             const uri = this.authUri;

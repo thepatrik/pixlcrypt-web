@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import LoginControl from './LoginControl.js';
+import SignoutControl from './SignoutControl.js';
 import Auth from './utilities/auth.js';
 import AuthControl from './AuthControl.js';
 import Grid from './Grid.js';
@@ -31,6 +32,12 @@ class App extends Component {
                 render={() => {
                     return (
                         <AuthControl />
+                    )
+                }}/>
+                 <Route path="/signout"
+                render={() => {
+                    return (
+                        <SignoutControl />
                     )
                 }}/>
             </div>
