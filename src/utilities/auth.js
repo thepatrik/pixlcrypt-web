@@ -11,7 +11,7 @@ class Auth {
     }
 
     isSignedIn() {
-        return this.getToken() != null && this.getRefreshToken() != null;
+        return this.getIdToken() != null && this.getRefreshToken() != null;
     }
 
     getToken() {

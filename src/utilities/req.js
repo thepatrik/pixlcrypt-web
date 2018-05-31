@@ -10,7 +10,7 @@ class Req {
 
     get(url) {
         return new Promise((resolve, reject) => {
-            const token = this.auth.getToken();
+            const token = this.auth.getIdToken();
             const conf = {
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -30,7 +30,7 @@ class Req {
 
     post(url, params) {
         return new Promise((resolve, reject) => {
-            const token = this.auth.getToken();
+            const token = this.auth.getIdToken();
             const conf = {
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -40,7 +40,6 @@ class Req {
             axios.post(url, params, conf)
             .then(res => resolve(res))
             .catch(err => {
-                console.log("MKAY, got error", err);
                 if (err.response && err.response.status === 404) {
                     return axios.post(url, params, conf);
                 }
