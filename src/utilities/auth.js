@@ -48,6 +48,24 @@ class Auth {
         localStorage.removeItem("refresh_token");
     }
 
+    refreshTokenAsync() {
+        return new Promise((resolve, reject) => {
+            const uri = this.authUri;
+            const conf = {
+                headers: {"Content-Type": "application/x-www-form-urlencoded"}
+            };
+            const params = new URLSearchParams('grant_type=refresh_token&refresh_token=' + this.getRefreshToken() + '&client_id=' + this.getClientId());
+            axios.post(uri, params, conf).then(res => {
+                localStorage.setItem('refresh_token', res.data.refresh_token);
+                localStorage.setItem('access_token', res.data.access_token);
+                localStorage.setItem('id_token', res.data.id_token);
+                resolve();
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    }
+
     getTokensAsync(code) {
         return new Promise((resolve, reject) => {
             const uri = this.authUri;
