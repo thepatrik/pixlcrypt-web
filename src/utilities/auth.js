@@ -1,11 +1,11 @@
-import axios from 'axios';
-import Utils from './utils.js';
+import axios from "axios";
+import Utils from "./utils.js";
 
 class Auth {
 
     constructor() {
         this.authUri = "https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/token";
-        this.baseUri = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+        this.baseUri = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
         this.clientId = "542fu8i4nfb4eckn95j4uek1m6";
         this.redirectUri = this.baseUri + "/auth";
     }
@@ -54,11 +54,11 @@ class Auth {
             const conf = {
                 headers: {"Content-Type": "application/x-www-form-urlencoded"}
             };
-            const params = new URLSearchParams('grant_type=refresh_token&refresh_token=' + this.getRefreshToken() + '&client_id=' + this.getClientId());
+            const params = new URLSearchParams("grant_type=refresh_token&refresh_token=" + this.getRefreshToken() + "&client_id=" + this.getClientId());
             axios.post(uri, params, conf).then(res => {
-                localStorage.setItem('refresh_token', res.data.refresh_token);
-                localStorage.setItem('access_token', res.data.access_token);
-                localStorage.setItem('id_token', res.data.id_token);
+                localStorage.setItem("refresh_token", res.data.refresh_token);
+                localStorage.setItem("access_token", res.data.access_token);
+                localStorage.setItem("id_token", res.data.id_token);
                 resolve();
             }).catch(err => {
                 reject(err);
@@ -72,11 +72,11 @@ class Auth {
             const conf = {
                 headers: {"Content-Type": "application/x-www-form-urlencoded"}
             };
-            const params = new URLSearchParams('grant_type=authorization_code&client_id=' + this.getClientId() + '&redirect_uri=' + this.getRedirectUri() + '&code=' + (code ? code : this.parseCode()));
+            const params = new URLSearchParams("grant_type=authorization_code&client_id=" + this.getClientId() + "&redirect_uri=" + this.getRedirectUri() + "&code=" + (code ? code : this.parseCode()));
             axios.post(uri, params, conf).then(res => {
-                localStorage.setItem('refresh_token', res.data.refresh_token);
-                localStorage.setItem('access_token', res.data.access_token);
-                localStorage.setItem('id_token', res.data.id_token);
+                localStorage.setItem("refresh_token", res.data.refresh_token);
+                localStorage.setItem("access_token", res.data.access_token);
+                localStorage.setItem("id_token", res.data.id_token);
                 resolve();
             }).catch(err => {
                 reject(err);

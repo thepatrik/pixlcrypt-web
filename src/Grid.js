@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import Req from './utilities/req';
-import Gallery from 'react-grid-gallery';
-import Utils from './utilities/utils.js';
+import React, { Component } from "react";
+import Req from "./utilities/req";
+import Gallery from "react-grid-gallery";
+import Utils from "./utilities/utils.js";
 
 class Grid extends Component {
 
@@ -68,7 +68,7 @@ class Grid extends Component {
 
                         this.setState({data: data});
                     });
-                })
+                });
             }
         }).catch(err => {
             console.log("Could not make request", err);

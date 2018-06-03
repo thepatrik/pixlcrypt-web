@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Auth from './utilities/auth.js';
+import React, { Component } from "react";
+import Auth from "./utilities/auth.js";
 
 class LoginControl extends Component {
 
@@ -14,13 +14,13 @@ class LoginControl extends Component {
         if (isSignedIn) {
             return (
                 <div>
-                    <a href={"https://pixlcrypt.auth.eu-west-1.amazoncognito.com/logout?client_id=" + this.clientId + "&logout_uri=" + (window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '')) + "/signout"}>Sign out</a>
+                    <a href={"https://pixlcrypt.auth.eu-west-1.amazoncognito.com/logout?client_id=" + this.clientId + "&logout_uri=" + (window.location.protocol+"//"+window.location.hostname+(window.location.port ? ":"+window.location.port: "")) + "/signout"}>Sign out</a>
                 </div>
             );
         }
         return (
             <div>
-                <a href={"https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/authorize?response_type=code&client_id=" + this.clientId + "&redirect_uri=" + (window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port: '')) + "/auth"}>Sign in</a>
+                <a href={"https://pixlcrypt.auth.eu-west-1.amazoncognito.com/oauth2/authorize?response_type=code&client_id=" + this.clientId + "&redirect_uri=" + (window.location.protocol+"//"+window.location.hostname+(window.location.port ? ":"+window.location.port: "")) + "/auth"}>Sign in</a>
             </div>
         );
     }

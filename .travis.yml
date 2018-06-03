@@ -2,7 +2,9 @@ language: js
 
 before_install: make install
 
-script: make test
+script:
+    - make eslint
+    - make test
 
 before_deploy: make build
 

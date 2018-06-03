@@ -1,0 +1,29 @@
+env:
+  browser: true
+  commonjs: true
+  es6: true
+  mocha: true
+extends: 'eslint:recommended'
+parserOptions:
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
+    jsx: true
+  sourceType: module
+plugins:
+  - react
+rules:
+  no-console: off
+  react/jsx-uses-vars: error
+  react/jsx-uses-react: error
+  indent:
+    - error
+    - 4
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - double
+  semi:
+    - error
+    - always

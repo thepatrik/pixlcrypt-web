@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import Auth from './utilities/auth.js';
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import Auth from "./utilities/auth.js";
 
 class AuthControl extends Component {
 

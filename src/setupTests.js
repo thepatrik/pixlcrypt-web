@@ -15,4 +15,4 @@ var localStorageMock = (function() {
         }
     };
 })();
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
