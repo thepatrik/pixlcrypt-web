@@ -1,5 +1,10 @@
 import axios from "axios";
+import * as jwt_decode from "jwt-decode";
 import Utils from "./utils.js";
+
+const refreshTokenKey = "refresh_token";
+const accessTokenKey = "access_token";
+const idTokenKey = "id_token";
 
 class Auth {
 
@@ -15,15 +20,15 @@ class Auth {
     }
 
     getToken() {
-        return localStorage.getItem("access_token");
+        return localStorage.getItem(accessTokenKey);
     }
 
     getRefreshToken() {
-        return localStorage.getItem("refresh_token");
+        return localStorage.getItem(refreshTokenKey);
     }
 
     getIdToken() {
-        return localStorage.getItem("id_token");
+        return localStorage.getItem(idTokenKey);
     }
 
     getBaseUri() {
@@ -38,14 +43,24 @@ class Auth {
         return this.clientId;
     }
 
+    getPayload() {
+        let token = this.getIdToken();
+        return jwt_decode(token);
+    }
+
+    getEmail() {
+        let payload = this.getPayload();
+        return payload.email;
+    }
+
     parseCode() {
         return Utils.getParameterByName("code");
     }
 
     clearTokens() {
-        localStorage.removeItem("id_token");
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
+        localStorage.removeItem(idTokenKey);
+        localStorage.removeItem(accessTokenKey);
+        localStorage.removeItem(refreshTokenKey);
     }
 
     refreshTokenAsync() {
@@ -56,9 +71,7 @@ class Auth {
             };
             const params = new URLSearchParams("grant_type=refresh_token&refresh_token=" + this.getRefreshToken() + "&client_id=" + this.getClientId());
             axios.post(uri, params, conf).then(res => {
-                localStorage.setItem("refresh_token", res.data.refresh_token);
-                localStorage.setItem("access_token", res.data.access_token);
-                localStorage.setItem("id_token", res.data.id_token);
+                this._setTokenData(res.data);
                 resolve();
             }).catch(err => {
                 reject(err);
@@ -74,14 +87,18 @@ class Auth {
             };
             const params = new URLSearchParams("grant_type=authorization_code&client_id=" + this.getClientId() + "&redirect_uri=" + this.getRedirectUri() + "&code=" + (code ? code : this.parseCode()));
             axios.post(uri, params, conf).then(res => {
-                localStorage.setItem("refresh_token", res.data.refresh_token);
-                localStorage.setItem("access_token", res.data.access_token);
-                localStorage.setItem("id_token", res.data.id_token);
+                this._setTokenData(res.data);
                 resolve();
             }).catch(err => {
                 reject(err);
             });
         });
+    }
+
+    _setTokenData(data) {
+        if (data.hasOwnProperty(refreshTokenKey)) localStorage.setItem(refreshTokenKey, data.refresh_token);
+        if (data.hasOwnProperty(accessTokenKey)) localStorage.setItem(accessTokenKey, data.access_token);
+        if (data.hasOwnProperty(idTokenKey)) localStorage.setItem(idTokenKey, data.id_token);
     }
 }
 

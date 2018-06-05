@@ -7,13 +7,16 @@ class Grid extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {data: Utils.getDefaultPhotos(), isSignedIn: props.isSignedIn};
+        this.state = {data: [], isSignedIn: props.isSignedIn};
     }
 
     componentWillMount() {
         const isSignedIn = this.state.isSignedIn;
         if (isSignedIn) {
             this.fetchData();
+        } else {
+            let data = Utils.getDefaultPhotos();
+            this.setState({data: data});
         }
     }
 
@@ -65,9 +68,8 @@ class Grid extends Component {
 
                         obj = data.find(o => o.thumbnail === el.url);
                         if (obj) obj.thumbnail = el.presigned;
-
-                        this.setState({data: data});
                     });
+                    this.setState({data: data});
                 });
             }
         }).catch(err => {
