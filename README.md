@@ -24,10 +24,13 @@ Make a production build
 
     make build
 
-Serve production build statically (served on [http://localhost:8000](http://localhost:8000))
+Build docker image
 
-    make serve-build
+    make docker-build
 
+Run docker container (served on [http://localhost:8000](http://localhost:8000))
+
+    make docker-run
 
 ### Deployment
 
