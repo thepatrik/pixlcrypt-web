@@ -63,10 +63,8 @@ class Upload extends Component {
         const prefix = "https://s3-eu-west-1.amazonaws.com/pixlcrypt-content/users/";
         const email = this.auth.getEmail();
         const time = this._yyyymmdd();
-        const fSplit = filename.split(".");
-        const ext = fSplit[fSplit.length-1]
-        const name = fSplit.splice(0, fSplit.length-2)[0]
-        const newFilename = name + "_o." + ext;
+        const lastDotIx = filename.lastIndexOf(".");
+        const newFilename = filename.slice(0, lastDotIx) + "_o" + filename.slice(lastDotIx);
         return prefix + email + "/src/" + time + "/" + newFilename;
     }
 }
