@@ -59,18 +59,22 @@ class Grid extends Component {
             if (res.data) {
                 let data = Utils.graphQlToObj(res.data.data.allItems);
                 let urls = Utils.getUrls(data);
-                let urlParams = {urls: urls.join(",")};
-                req.post("https://api.pixlcrypt.com/presign", urlParams).then(res => {
-                    res.data.forEach(el => {
-                        /* Wash away all source urls with presigned ones */
-                        let obj = data.find(o => o.src === el.url);
-                        if (obj) obj.src = el.presigned;
+                if (urls.length > 0) {
+                    let urlParams = {urls: urls.join(",")};
+                    req.post("https://api.pixlcrypt.com/presign", urlParams).then(res => {
+                        res.data.forEach(el => {
+                            /* Wash away all source urls with presigned ones */
+                            let obj = data.find(o => o.src === el.url);
+                            if (obj) obj.src = el.presigned;
 
-                        obj = data.find(o => o.thumbnail === el.url);
-                        if (obj) obj.thumbnail = el.presigned;
+                            obj = data.find(o => o.thumbnail === el.url);
+                            if (obj) obj.thumbnail = el.presigned;
+                        });
+                        this.setState({data: data});
                     });
+                } else {
                     this.setState({data: data});
-                });
+                }
             }
         }).catch(err => {
             console.log("Could not make request", err);

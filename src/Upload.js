@@ -3,6 +3,9 @@ import Dropzone from "react-dropzone";
 import Req from "./utilities/req";
 import Auth from "./utilities/auth";
 import axios from "axios";
+import async from "async";
+
+const CONCURRENCY_LIMIT = 8;
 
 class Upload extends Component {
 
@@ -16,9 +19,9 @@ class Upload extends Component {
         return (
             <div style={{margin: "2rem"}}>
                 <Dropzone accept="image/jpeg, image/png" onDrop={this.onDrop.bind(this)}>
-                    <p style={{margin: "0.5rem"}}>Drop your files here or click to select one.</p>
+                    <p style={{margin: "0.5rem"}}>Drop your files here or click to select.</p>
                     <br/>
-                    <p style={{margin: "0.5rem"}}>Only *.jpeg and *.png images will be accepted</p>
+                    <p style={{margin: "0.5rem", color: "grey"}}>Only jpeg and png images will be accepted.</p>
                 </Dropzone>
             </div>
         );
@@ -26,17 +29,25 @@ class Upload extends Component {
 
     onDrop(files) {
         const req = new Req();
-        const file = files[0];
-        const url = this._getFilePath(file.name);
-        const presignUrl = "https://api.pixlcrypt.com/presign?url=" + url + "&operation=putObject";
+        async.mapLimit(files, CONCURRENCY_LIMIT, (file, done) => {
+            const url = this._getFilePath(file.name);
+            const presignUrl = "https://api.pixlcrypt.com/presign?url=" + url + "&operation=putObject";
 
-        req.get(presignUrl).then(res => {
-            const presigned = res.data.presigned;
-            axios.put(presigned, file).then(res => {
-                console.log("File successfully uploaded!", res);
+            req.get(presignUrl).then(res => {
+                const presigned = res.data.presigned;
+                axios.put(presigned, file).then(res => {
+                    console.log("File successfully uploaded!", res);
+                    done();
+                }).catch(err => {
+                    console.log(err);
+                    done();
+                });
             }).catch(err => {
                 console.log(err);
+                done();
             });
+        }, () => {
+            console.log("All done!");
         });
     }
 
@@ -49,12 +60,14 @@ class Upload extends Component {
     }
 
     _getFilePath(filename) {
-        const prefix = "https://s3-eu-west-1.amazonaws.com/pixlcrypt-content/users/src/";
+        const prefix = "https://s3-eu-west-1.amazonaws.com/pixlcrypt-content/users/";
         const email = this.auth.getEmail();
         const time = this._yyyymmdd();
         const fSplit = filename.split(".");
-        const newFilename = fSplit[fSplit.length-2] + "_o." + fSplit[fSplit.length-1];
-        return prefix + email + "/" + time + "/" + newFilename;
+        const ext = fSplit[fSplit.length-1]
+        const name = fSplit.splice(0, fSplit.length-2)[0]
+        const newFilename = name + "_o." + ext;
+        return prefix + email + "/src/" + time + "/" + newFilename;
     }
 }
 
