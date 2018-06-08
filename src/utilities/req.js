@@ -15,46 +15,32 @@ class Req {
     }
 
     get(url, conf) {
-        return new Promise((resolve, reject) => {
-            this._fire(methods.GET, url, undefined, conf)
-                .then(res => resolve(res))
-                .catch(err => {
-                    if (err.response && err.response.status === 401) {
-                        this.auth.refreshTokenAsync().then(() => {
-                            return this._fire(methods.GET, url, undefined, conf);
-                        }).catch(err => reject(err));
-                    } else {
-                        reject(err);
-                    }
-                });
-        });
+        return this._fire(methods.GET, url, undefined, conf);
     }
 
     post(url, params, conf) {
-        return new Promise((resolve, reject) => {
-            this._fire(methods.POST, url, params, conf)
-                .then(res => resolve(res))
-                .catch(err => {
-                    if (err.response && err.response.status === 401) {
-                        this.auth.refreshTokenAsync().then(() => {
-                            return this._fire(methods.POST, url, params, conf);
-                        }).catch(err => reject(err));
-                    } else {
-                        reject(err);
-                    }
-                });
-        });
+        return this._fire(methods.POST, url, params, conf);
     }
 
     put(url, params, conf) {
+        return this._fire(methods.PUT, url, params, conf);
+    }
+
+    _fire(method, url, params, conf) {
         return new Promise((resolve, reject) => {
-            this._fire(methods.PUT, url, params, conf)
+            this._request(method, url, params, conf)
                 .then(res => resolve(res))
                 .catch(err => {
                     if (err.response && err.response.status === 401) {
-                        this.auth.refreshTokenAsync().then(() => {
-                            return this._fire(methods.PUT, url, params, conf);
-                        }).catch(err => reject(err));
+                        console.log("Got 401 during request. Trying to refresh access token...");
+                        this.auth.refreshTokenAsync()
+                            .then(() => {
+                                console.log("Successfully refreshed token");
+                                this._request(method, url, params, conf)
+                                    .then(res => resolve(res))
+                                    .catch(err => reject(err));
+                            })
+                            .catch(err => reject(err));
                     } else {
                         reject(err);
                     }
@@ -62,7 +48,7 @@ class Req {
         });
     }
 
-    _fire(method, url, params, conf) {
+    _request(method, url, params, conf) {
         if (!conf) conf = {headers: {}};
         conf.headers = Object.assign(conf.headers, this._getHeaders());
 
