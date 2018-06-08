@@ -4,6 +4,7 @@ import Req from "./utilities/req";
 import Auth from "./utilities/auth";
 import axios from "axios";
 import async from "async";
+import { Notification } from "react-notification";
 
 const CONCURRENCY_LIMIT = 8;
 
@@ -11,24 +12,38 @@ class Upload extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {selectedFile: ""};
+        this.state = {
+            selectedFile: "",
+            isNoticationActive: false,
+            message: ""
+        };
         this.auth = new Auth();
     }
 
     render() {
         return (
-            <div style={{margin: "2rem"}}>
+            <div style={{margin: "1rem"}}>
                 <Dropzone accept="image/jpeg, image/png" onDrop={this.onDrop.bind(this)}>
                     <p style={{margin: "0.5rem"}}>Drop your files here or click to select.</p>
                     <br/>
                     <p style={{margin: "0.5rem", color: "grey"}}>Only jpeg and png images will be accepted.</p>
                 </Dropzone>
+                <Notification
+                    title={"File uploads"}
+                    isActive={this.state.isNoticationActive}
+                    message={this.state.message}
+                    dismissAfter={3000}
+                />
             </div>
         );
     }
 
     onDrop(files) {
         const req = new Req();
+        this.setState({
+            isNoticationActive: true,
+            message: "Uploading " + files.length + " " + (files.length === 1 ? "file" : "files") + "..."
+        });
         async.mapLimit(files, CONCURRENCY_LIMIT, (file, done) => {
             const url = this._getFilePath(file.name);
             const presignUrl = "https://api.pixlcrypt.com/presign?url=" + url + "&operation=putObject";
@@ -47,7 +62,9 @@ class Upload extends Component {
                 done();
             });
         }, () => {
-            console.log("All done!");
+            this.setState({
+                message: "Done"
+            });
         });
     }
 
