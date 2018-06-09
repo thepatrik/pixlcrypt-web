@@ -23,10 +23,10 @@ class Upload extends Component {
     render() {
         return (
             <div style={{margin: "1rem"}}>
-                <Dropzone accept="image/jpeg, image/png" onDrop={this.onDrop.bind(this)}>
+                <Dropzone accept="image/jpeg, image/png, image/gif, image/bmp, image/tiff" onDrop={this.onDrop.bind(this)}>
                     <p style={{margin: "0.5rem"}}>Drop your files here or click to select.</p>
                     <br/>
-                    <p style={{margin: "0.5rem", color: "grey"}}>Only jpeg and png images will be accepted.</p>
+                    <p style={{margin: "0.5rem", color: "grey"}}>Only image files (jpeg, png, gif, bmp, tiff) are accepted.</p>
                 </Dropzone>
                 <Notification
                     title={"File uploads"}
