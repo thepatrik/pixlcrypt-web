@@ -24,7 +24,7 @@ class Grid extends Component {
         let req = new Req();
         let params = {
             "query": `{
-                allItems (first: 30) {
+                allItems (first: 30, orderBy: CREATED_AT_DESC) {
                   edges {
                     node {
                       id
