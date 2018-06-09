@@ -81,8 +81,17 @@ class Upload extends Component {
         const email = this.auth.getEmail();
         const time = this._yyyymmdd();
         const lastDotIx = filename.lastIndexOf(".");
-        const newFilename = filename.slice(0, lastDotIx) + "_o" + filename.slice(lastDotIx);
+        const ext = this._getFileExtension(filename.slice(lastDotIx));
+        const newFilename = filename.slice(0, lastDotIx) + "_o." + ext;
         return prefix + email + "/src/" + time + "/" + newFilename;
+    }
+
+    _getFileExtension(filename) {
+        let ext = filename.split(".").pop().toLowerCase();
+        if (ext === "jpeg") {
+            return "jpg";
+        }
+        return ext;
     }
 }
 
