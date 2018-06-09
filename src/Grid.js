@@ -2,17 +2,23 @@ import React, { Component } from "react";
 import Req from "./utilities/req";
 import Gallery from "react-grid-gallery";
 import Utils from "./utilities/utils.js";
+import Progress from "./Progress";
 
 class Grid extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {data: [], isSignedIn: props.isSignedIn};
+        this.state = {
+            data: [],
+            isSignedIn: props.isSignedIn,
+            showProgress: false
+        };
     }
 
     componentWillMount() {
         const isSignedIn = this.state.isSignedIn;
         if (isSignedIn) {
+            this.setState({showProgress: true});
             this.fetchData();
         } else {
             let data = Utils.getDefaultPhotos();
@@ -70,10 +76,16 @@ class Grid extends Component {
                             obj = data.find(o => o.thumbnail === el.url);
                             if (obj) obj.thumbnail = el.presigned;
                         });
-                        this.setState({data: data});
+                        this.setState({
+                            data: data,
+                            showProgress: false
+                        });
                     });
                 } else {
-                    this.setState({data: data});
+                    this.setState({
+                        data: data,
+                        showProgress: false
+                    });
                 }
             }
         }).catch(err => {
@@ -82,9 +94,11 @@ class Grid extends Component {
     }
 
     render() {
-        let data = this.state.data;
         return (
-            <Gallery images={data} enableImageSelection={false}/>
+            <div>
+                {this.state.showProgress ? <Progress/> : null}
+                <Gallery images={this.state.data} enableImageSelection={false}/>
+            </div>
         );
     }
 }
