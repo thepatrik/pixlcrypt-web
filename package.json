@@ -2,6 +2,19 @@
   "name": "pixlcrypt-web",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "react-scripts build",
+    "predocker:build": "npm run build; cp ./Dockerfile ./build",
+    "docker:build": "docker build -t thepatrik/pixlcrypt-web build",
+    "docker:deploy": "npm run docker:build && npm run docker:tag && npm run docker:push",
+    "docker:push": "docker push thepatrik/pixlcrypt-web:latest",
+    "docker:run": "docker run -p 8000:80 thepatrik/pixlcrypt-web",
+    "docker:tag": "docker tag thepatrik/pixlcrypt-web:latest thepatrik/pixlcrypt-web:latest",
+    "eslint": "./node_modules/.bin/eslint src public",
+    "eslint:fix": "./node_modules/.bin/eslint src public --fix",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
+  },
   "dependencies": {
     "async": "^2.6.1",
     "axios": "^0.18.0",
@@ -15,19 +28,6 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "spin.js": "^4.0.0"
-  },
-  "scripts": {
-    "build": "react-scripts build",
-    "predocker:build": "npm run build; cp ./Dockerfile ./build",
-    "docker:build": "docker build -t thepatrik/pixlcrypt-web build",
-    "docker:deploy": "npm run docker:build && npm run docker:tag && npm run docker:push",
-    "docker:push": "docker push thepatrik/pixlcrypt-web:latest",
-    "docker:run": "docker run -p 8000:80 thepatrik/pixlcrypt-web",
-    "docker:tag": "docker tag thepatrik/pixlcrypt-web:latest thepatrik/pixlcrypt-web:latest",
-    "eslint": "./node_modules/.bin/eslint src",
-    "eslint:fix": "./node_modules/.bin/eslint src --fix",
-    "start": "react-scripts start",
-    "test": "react-scripts test --env=jsdom"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
