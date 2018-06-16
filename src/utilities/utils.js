@@ -37,15 +37,6 @@ class Utils {
         return res;
     }
 
-    static getUrls(a) {
-        let urls = [];
-        a.forEach(item => {
-            urls.push(item.src);
-            urls.push(item.thumbnail);
-        });
-        return urls;
-    }
-
     static getDefaultPhotos() {
         return [
             {
