@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+import logo from "./images/pixlcrypt.svg";
 import "./App.css";
 import LoginControl from "./LoginControl.js";
 import SignoutControl from "./SignoutControl.js";
