@@ -39,10 +39,10 @@ class Upload extends Component {
                     <Line percent={this.state.percent} strokeWidth="1" trailWidth="1" strokeColor="#f600ff" strokeLinecap="round"/>
                 </div>
                 <div style={{margin: "1rem"}}>
-                    <Dropzone accept="image/jpeg, image/png, image/gif, image/bmp, image/tiff" onDrop={this.onDrop.bind(this)}>
+                    <Dropzone accept="image/jpeg, image/png, image/gif, image/bmp, image/tiff, video/mp4" onDrop={this.onDrop.bind(this)}>
                         <p style={{margin: "0.5rem"}}>Drop your files here or click to select.</p>
                         <br/>
-                        <p style={{margin: "0.5rem", color: "grey"}}>Only image files (jpeg, png, gif, bmp, tiff) are accepted.</p>
+                        <p style={{margin: "0.5rem", color: "grey"}}>Only image (jpeg, png, gif, bmp, tiff) and video (mp4) files are accepted.</p>
                     </Dropzone>
                 </div>
                 <Notification
