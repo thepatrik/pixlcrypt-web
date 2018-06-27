@@ -14,17 +14,35 @@ class Utils {
         return res;
     }
 
+    static _getThumb(thumbs, def) {
+        for (let i in thumbs) {
+            let thumb = thumbs[i].node;
+            if (thumb.height <= 300 || thumb.width <= 300) return thumb;
+        }
+        return def;
+    }
+
+    static _getSrc(thumbs, def) {
+        for (let i in thumbs) {
+            let thumb = thumbs[i].node;
+            if (thumb.height === 1024 || thumb.width === 1024) return thumb.src;
+        }
+        return def;
+    }
+
     static graphQlToObj(allItems) {
         let res = [];
         allItems.edges.forEach(el => {
             let node = el.node;
             let item = {};
-            item.src = node.src;
+            item.src = this._getSrc(node.thumbsByItemId.edges, node.src);
             item.caption = node.caption;
             item.alt = node.description;
-            item.thumbnail = node.thumbsByItemId.edges[0].node.src;
-            item.thumbnailWidth = node.thumbsByItemId.edges[0].node.width;
-            item.thumbnailHeight = node.thumbsByItemId.edges[0].node.height;
+
+            let thumb = this._getThumb(node.thumbsByItemId.edges, node.thumbsByItemId.edges[0].node);
+            item.thumbnail = thumb.src;
+            item.thumbnailWidth = thumb.width;
+            item.thumbnailHeight = thumb.height;
             item.tags = [];
             node.itemTagsByItemId.edges.forEach(tag => {
                 item.tags.push({
