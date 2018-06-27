@@ -7,6 +7,7 @@ import Auth from "./utilities/auth.js";
 import AuthControl from "./AuthControl.js";
 import Upload from "./Upload.js";
 import Grid from "./Grid.js";
+import Player from "./Player.js";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 class App extends Component {
@@ -39,6 +40,12 @@ class App extends Component {
                         render={() => {
                             return (
                                 <SignoutControl />
+                            );
+                        }}/>
+                    <Route path="/player"
+                        render={() => {
+                            return (
+                                <Player />
                             );
                         }}/>
                     <Route path="/upload"
