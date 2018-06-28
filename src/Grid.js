@@ -36,7 +36,7 @@ class Grid extends Component {
                       id
                       src
                       caption
-                      description
+                      contentType
                       itemTagsByItemId {
                         edges {
                           node {
@@ -75,11 +75,21 @@ class Grid extends Component {
         });
     }
 
+    _onImageClick(ev) {
+        let url = ev.target.src;
+        for (let i in this.state.data) {
+            let node = this.state.data[i];
+            if (url === node.src && node.type === "VIDEO") {
+                return window.open("/play?url=" + node.videoSrc, "_blank");
+            }
+        }
+    }
+
     render() {
         return (
             <div>
                 {this.state.showProgress ? <Progress/> : null}
-                <Gallery images={this.state.data} enableImageSelection={false}/>
+                <Gallery images={this.state.data} enableImageSelection={false} onClickImage={this._onImageClick.bind(this)}/>
             </div>
         );
     }

@@ -37,13 +37,14 @@ class Utils {
             let item = {};
             item.src = this._getSrc(node.thumbsByItemId.edges, node.src);
             item.caption = node.caption;
-            item.alt = node.description;
 
             let thumb = this._getThumb(node.thumbsByItemId.edges, node.thumbsByItemId.edges[0].node);
             item.thumbnail = thumb.src;
             item.thumbnailWidth = thumb.width;
             item.thumbnailHeight = thumb.height;
             item.tags = [];
+            item.type = node.contentType;
+            if (item.type === "VIDEO") item.videoSrc = node.src;
             node.itemTagsByItemId.edges.forEach(tag => {
                 item.tags.push({
                     title: tag.node.tagByTagId.key,
