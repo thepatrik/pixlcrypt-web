@@ -80,7 +80,7 @@ class Grid extends Component {
         for (let i in this.state.data) {
             let node = this.state.data[i];
             if (url === node.src && node.type === "VIDEO") {
-                return window.open("/play?url=" + node.videoSrc, "_blank");
+                return window.open("/play?url=" + window.btoa(node.videoSrc), "_blank");
             }
         }
     }

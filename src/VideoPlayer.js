@@ -12,8 +12,12 @@ class VideoPlayer extends Component {
 
     componentWillMount() {
         let url = Utils.getParameterByName("url");
-        if (url && url.startsWith("https://pixlcrypt-content.s3.eu-west-1.amazonaws.com/")) {
-            this.setState({url: url});
+        if (url) {
+            let decodedUrl = window.atob(url);
+            if (decodedUrl.startsWith("https://pixlcrypt-content.s3.eu-west-1.amazonaws.com/")) {
+                console.log("URL:", decodedUrl);
+                this.setState({url: decodedUrl});
+            }
         }
     }
 
