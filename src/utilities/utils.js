@@ -83,7 +83,16 @@ class Utils {
             item.thumbnailHeight = thumb.height;
             item.tags = [];
             item.type = node.contentType;
-            if (item.type === contentTypes.VIDEO) item.videoSrc = node.src;
+
+            const isVideo = item.type === contentTypes.VIDEO;
+            if (isVideo) {
+                item.videoSrc = node.src;
+                item.tags.push({
+                    title: "video",
+                    value: "video"
+                });
+            }
+
             node.itemTagsByItemId.edges.forEach(tag => {
                 item.tags.push({
                     title: tag.node.tagByTagId.key,
