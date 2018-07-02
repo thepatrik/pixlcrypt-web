@@ -13,6 +13,7 @@ class Grid extends Component {
             isSignedIn: props.isSignedIn,
             showProgress: false
         };
+        this.galleryRef = React.createRef();
     }
 
     componentWillMount() {
@@ -30,7 +31,7 @@ class Grid extends Component {
         let req = new Req();
         let params = {
             "query": `{
-                allItems (first: 30, orderBy: CREATED_AT_DESC) {
+                allItems (orderBy: CREATED_AT_DESC) {
                   edges {
                     node {
                       id
@@ -83,13 +84,15 @@ class Grid extends Component {
                 return window.open("/play?url=" + window.btoa(node.videoSrc), "_blank");
             }
         }
+        const node = this.galleryRef.current;
+        node.gotoNext();
     }
 
     render() {
         return (
             <div>
                 {this.state.showProgress ? <Progress/> : null}
-                <Gallery images={this.state.data} enableImageSelection={false} onClickImage={this._onImageClick.bind(this)}/>
+                <Gallery id="gallery" ref={this.galleryRef} images={this.state.data} enableImageSelection={false} onClickImage={this._onImageClick.bind(this)}/>
             </div>
         );
     }
