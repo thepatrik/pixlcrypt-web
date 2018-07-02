@@ -1,3 +1,10 @@
+"use strict";
+
+const contentTypes = {
+    PHOTO: "PHOTO",
+    VIDEO: "VIDEO"
+};
+
 class Utils {
 
     static getParameterByName(name, url, decodeUri) {
@@ -17,7 +24,7 @@ class Utils {
     static _getThumb(thumbs, def) {
         for (let i in thumbs) {
             let thumb = thumbs[i].node;
-            if (thumb.height <= 300 || thumb.width <= 300) return thumb;
+            if (this._isSmallThumb(thumb)) return thumb;
         }
         return def;
     }
@@ -25,9 +32,41 @@ class Utils {
     static _getSrc(thumbs, def) {
         for (let i in thumbs) {
             let thumb = thumbs[i].node;
-            if (thumb.height === 1024 || thumb.width === 1024) return thumb.src;
+            if (this._isBigThumb(thumb)) return thumb.src;
         }
         return def;
+    }
+
+    static _isSmallThumb(thumb) {
+        return thumb.height <= 300 || thumb.width <= 300;
+    }
+
+    static _isBigThumb(thumb) {
+        if (thumb.src.split("/").pop().split(".")[0].endsWith("_b")) {
+            return thumb.src;
+        } else if (thumb.height === 1024 || thumb.width === 1024) {
+            return thumb.src;
+        }
+        return false;
+    }
+
+    static _toExifOrientation(degrees) {
+        let orientation;
+        switch(degrees) {
+        case 90:
+            orientation = 8;
+            break;
+        case 180:
+            orientation = 3;
+            break;
+        case 270:
+            orientation = 6;
+            break;
+        default:
+            orientation = 0;
+            break;
+        }
+        return orientation;
     }
 
     static graphQlToObj(allItems) {
@@ -44,7 +83,7 @@ class Utils {
             item.thumbnailHeight = thumb.height;
             item.tags = [];
             item.type = node.contentType;
-            if (item.type === "VIDEO") item.videoSrc = node.src;
+            if (item.type === contentTypes.VIDEO) item.videoSrc = node.src;
             node.itemTagsByItemId.edges.forEach(tag => {
                 item.tags.push({
                     title: tag.node.tagByTagId.key,
