@@ -5,6 +5,12 @@ const contentTypes = {
     VIDEO: "VIDEO"
 };
 
+const imageSizes = {
+    SMALL: "_t",
+    BIG: "_b",
+    ORIGINAL: "_o",
+};
+
 class Utils {
 
     static getParameterByName(name, url, decodeUri) {
@@ -21,7 +27,7 @@ class Utils {
         return res;
     }
 
-    static _getThumb(thumbs, def) {
+    static _getSmallThumb(thumbs, def) {
         for (let i in thumbs) {
             let thumb = thumbs[i].node;
             if (this._isSmallThumb(thumb)) return thumb;
@@ -38,16 +44,17 @@ class Utils {
     }
 
     static _isSmallThumb(thumb) {
+        if (thumb.src.split("/").pop().split(".")[0].endsWith(imageSizes.SMALL)) {
+            return true;
+        }
         return thumb.height <= 300 || thumb.width <= 300;
     }
 
     static _isBigThumb(thumb) {
-        if (thumb.src.split("/").pop().split(".")[0].endsWith("_b")) {
-            return thumb.src;
-        } else if (thumb.height === 1024 || thumb.width === 1024) {
-            return thumb.src;
+        if (thumb.src.split("/").pop().split(".")[0].endsWith(imageSizes.BIG)) {
+            return true;
         }
-        return false;
+        return thumb.height === 1024 || thumb.width === 1024;
     }
 
     static _toExifOrientation(degrees) {
@@ -77,7 +84,7 @@ class Utils {
             item.src = this._getSrc(node.thumbsByItemId.edges, node.src);
             item.caption = node.caption;
 
-            let thumb = this._getThumb(node.thumbsByItemId.edges, node.thumbsByItemId.edges[0].node);
+            let thumb = this._getSmallThumb(node.thumbsByItemId.edges, node.thumbsByItemId.edges[0].node);
             item.thumbnail = thumb.src;
             item.thumbnailWidth = thumb.width;
             item.thumbnailHeight = thumb.height;
