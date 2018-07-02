@@ -80,7 +80,7 @@ class Grid extends Component {
         let url = ev.target.src;
         for (let i in this.state.data) {
             let node = this.state.data[i];
-            if (url === node.src && node.type === "VIDEO") {
+            if (url === node.src && node.type === Utils.getContentTypes().VIDEO) {
                 return window.open("/play?url=" + window.btoa(node.videoSrc), "_blank");
             }
         }
@@ -92,7 +92,7 @@ class Grid extends Component {
         return (
             <div>
                 {this.state.showProgress ? <Progress/> : null}
-                <Gallery id="gallery" ref={this.galleryRef} images={this.state.data} enableImageSelection={false} onClickImage={this._onImageClick.bind(this)}/>
+                <Gallery id="gallery" ref={this.galleryRef} images={this.state.data} enableImageSelection={false} onClickImage={this._onImageClick.bind(this)} showLightboxThumbnails={true}/>
             </div>
         );
     }

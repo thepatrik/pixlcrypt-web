@@ -1,5 +1,3 @@
-"use strict";
-
 const contentTypes = {
     PHOTO: "PHOTO",
     VIDEO: "VIDEO"
@@ -12,6 +10,10 @@ const imageSizes = {
 };
 
 class Utils {
+
+    static getContentTypes() {
+        return contentTypes;
+    }
 
     static getParameterByName(name, url, decodeUri) {
         if (!url) url = window.location.href;
