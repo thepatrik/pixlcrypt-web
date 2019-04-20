@@ -7,13 +7,12 @@ env:
 extends: 'eslint:recommended'
 parserOptions:
   ecmaFeatures:
-    experimentalObjectRestSpread: true
     jsx: true
   sourceType: module
 plugins:
   - react
 rules:
-  no-console: off
+  no-console: "off"
   react/jsx-uses-vars: error
   react/jsx-uses-react: error
   indent:
