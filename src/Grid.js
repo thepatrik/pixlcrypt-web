@@ -92,7 +92,7 @@ class Grid extends Component {
         return (
             <div>
                 {this.state.showProgress ? <Progress/> : null}
-                <Gallery id="gallery" ref={this.galleryRef} images={this.state.data} enableImageSelection={false} onClickImage={this._onImageClick.bind(this)} showLightboxThumbnails={true}/>
+                <Gallery id="gallery" ref={this.galleryRef} images={this.state.data} enableImageSelection={false} margin={3} onClickImage={this._onImageClick.bind(this)} showLightboxThumbnails={true}/>
             </div>
         );
     }
